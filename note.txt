@@ -1,0 +1,78 @@
+Umi Js cần chú ý các điểm sau:
+_ Route đễ dẫn page 
+_ Gọi dữ liệu *
+_ UI với Ant Design tương tự với Material UI *
+_ Table với Ant Design
+_ Dịch với formatMessage useIntl
+_ CSS với .less
+
+** Với phần gọi dữ liệu hơi lằng nhằng cho nên sẽ note lại cho mn dễ hiểu **
+
+Có 2 cách để thực hiện api:
+	Cách 1: Thông qua cách thức redux của umi:
+		_ Dữ liệu sẽ đi từ view page bằng cách dispatch 1 action muốn thực hiện dispatch.
+			+dispatch({ type: 'account/getListAccountModel', payload: params })
+			
+		_ Sau đó gọi đến hàm effect trong model
+			+effects: 
+			{
+    		 *getListAccountModel({ payload }, { call, put }) {
+      	 	   const result = yield call(getListAccountService, payload)
+      	 	   if (result && result.data) {
+          	     yield put({
+                   type: 'setAccount',
+           	       payload: result || [],
+           	     })
+      	  	    }
+    	 	  },
+  			},
+  			
+  		_ Khi gọi hàm trên thì sẽ gọi fetch api ở bên service thông qua hàm
+  		'const result = yield call(getListAccountService, payload)' và khi đó sẽ call qua
+  		bên service xử lý:
+  			+services:
+  			export function getListAccountService(params) {
+  				return fetchAuth({
+    				url: routes.getListAccount,
+    				method: 'GET',
+    				params: {
+      			    ...params,
+    			 },
+  			  })
+			}
+			
+  		_ Đẩy dữ liệu xuống reducer:
+  			+reducers:
+  			{
+    			setAccount(state, { payload }): AccountModelState {
+      			return {
+        		  ...state,
+        		  listAccount: payload.data,
+        		  total: payload.total,
+      			}
+    		  },
+  			},
+  			
+  		_ Và lưu dữ liệu đó trong state của redux
+	
+	
+	Cách 2: Gọi thẳng fetch api qua bên service xử lý:
+		_ Dữ liệu sẽ gọi từ view page. Ví dụ:
+		const fetchCustomerOrder = async () => {
+    	  const res = await getCustomerOrder(id)
+    		if (res) {
+      		setCustomerOrder(res)
+    		} else {
+    	  }
+  		}
+  		
+  		_ Và hàm trên được gọi qua từ service. Ví dụ:
+  		export function getCustomerOrder(id) {
+  		  return fetchAuth({
+    		url: routes.getCustomerOrder(id),
+    		method: 'GET',
+  		  })
+		}
+		
+		_ Vì vậy kết quả sẽ trả về cho biến res ở trên. Có thể sử dụng liền
+
