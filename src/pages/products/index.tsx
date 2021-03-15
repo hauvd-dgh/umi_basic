@@ -14,9 +14,9 @@ const columns = [
         key: 'name',
         align: 'left',
         render: text => <>
-            <p>
+            {/* <p>
                 {text.SKU}
-            </p>
+            </p> */}
             <p>{text.name}</p>
         </>
     },
