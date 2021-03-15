@@ -18,7 +18,9 @@ import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
-import logo from '../assets/logo.svg';
+import DefaultSettings from '../../config/defaultSettings';
+
+const { logo } = DefaultSettings
 
 const noMatch = (
   <Result
@@ -55,29 +57,16 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const defaultFooterDom = (
-  <DefaultFooter
-    copyright={`${new Date().getFullYear()} 蚂蚁集团体验技术部出品`}
-    links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
-    ]}
-  />
+  <div>
+    <hr />
+    <p style={{
+      textAlign: 'center',
+      margin: '20px 0px',
+      color: 'gray',
+    }}>
+      copyright @ {`${new Date().getFullYear()} digitech solutions`}
+    </p>
+  </div>
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {

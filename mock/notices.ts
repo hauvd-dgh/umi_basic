@@ -5,7 +5,7 @@ const getNotices = (req: Request, res: Response) => {
     {
       id: '000000001',
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/ThXAXghbEsBCCSDihZxY.png',
-      title: '你收到了 14 份新周报',
+      title: 'You have received 14 new weekly reports',
       datetime: '2017-08-09',
       type: 'notification',
     },

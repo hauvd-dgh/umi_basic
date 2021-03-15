@@ -1,5 +1,5 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
-import { extend } from 'umi-request';
+import { extend, RequestOptionsInit } from 'umi-request';
 import { notification } from 'antd';
 
 const codeMessage: { [status: number]: string } = {
@@ -20,30 +20,97 @@ const codeMessage: { [status: number]: string } = {
   504: '网关超时。',
 };
 
-/** 异常处理程序 */
-const errorHandler = (error: { response: Response }): Response => {
-  const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+const _apiPrefix = 'https://ecommerce-api.vndigitech.com'
 
+interface FetchOptions extends RequestOptionsInit {
+  url: string
+  autoPrefix?: boolean
+}
+
+const generateUrl = (url: string, _autoPrefix = false) => {
+  if (!_autoPrefix) return url
+  return `${_apiPrefix}/${url}`
+}
+
+const errorHandler = (error: { response: Response; data: any }): Response => {
+  const { response } = error
+  if (!response) {
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  } else if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
+      description:
+        'Mạng của bạn không bình thường và không thể kết nối với máy chủ',
+      message: 'Mạng bất thường',
+    })
   }
-  return response;
-};
+  return error.data
+}
 
-/** 配置request请求时的默认参数 */
 const request = extend({
-  errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
-});
+  errorHandler,
+  timeout: 15000,
+})
+
+export const fetch = ({
+  url,
+  headers,
+  autoPrefix = true,
+  ...options
+}: FetchOptions) => {
+  return request(generateUrl(url, autoPrefix), {
+    method: 'GET',
+    headers: {
+      // 'Content-Type': 'application/json',
+      ...headers,
+    },
+    ...options,
+  })
+    .then(response => {
+      if (response) {
+        const { access_token, statusCode, message } = response
+        if (access_token) {
+          return { ...response, success: true }
+        }
+        if (message) {
+          notification.error({
+            message: `Lỗi yêu cầu`,
+            description: 'Không thể lấy dữ liệu',
+          })
+          return { ...response, success: false }
+        }
+        return { ...response }
+      }
+    })
+    .catch(error => {
+      const { message, statusCode } = error
+      notification.error(message)
+      return false
+    })
+}
+
+
+// /** 异常处理程序 */
+// const errorHandler = (error: { response: Response }): Response => {
+//   const { response } = error;
+//   if (response && response.status) {
+//     const errorText = codeMessage[response.status] || response.statusText;
+//     const { status, url } = response;
+
+//     notification.error({
+//       message: `请求错误 ${status}: ${url}`,
+//       description: errorText,
+//     });
+//   } else if (!response) {
+//     notification.error({
+//       description: '您的网络发生异常，无法连接服务器',
+//       message: '网络异常',
+//     });
+//   }
+//   return response;
+// };
+
+// /** 配置request请求时的默认参数 */
+// const request = extend({
+//   errorHandler, // 默认错误处理
+//   credentials: 'include', // 默认请求是否带上cookie
+// });
 
 export default request;

@@ -6,14 +6,14 @@ type DefaultSettings = Partial<ProSettings> & {
 
 const proSettings: DefaultSettings = {
   navTheme: 'dark',
-  // 拂晓蓝
-  primaryColor: '#1890ff',
+  primaryColor: 'green', //'#1890ff',
   layout: 'side',
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: 'Basic Project',
+  logo: 'https://www.carlogos.org/car-logos/lamborghini-logo-1000x1100.png', //'/logo.svg',
   pwa: false,
   iconfontUrl: '',
 };

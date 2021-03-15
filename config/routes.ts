@@ -30,8 +30,14 @@
               {
                 path: '/welcome',
                 name: 'welcome',
-                icon: 'smile',
+                // icon: 'smile',
                 component: './Welcome',
+              },
+              {
+                path: '/products',
+                name: 'Products',
+                icon: 'smile',
+                component: './products',
               },
               {
                 path: '/admin',
