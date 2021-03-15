@@ -68,13 +68,17 @@ const Products = () => {
 
     return (
         <PageHeaderWrapper>
-            <Table columns={columns} dataSource={data.items} pagination={{
-                showSizeChanger: true,
-                pageSize: params.limit,
-                current: params.page,
-                onChange: onTableChange,
-                total: data.total,
-            }}/>
+            <Table
+                columns={columns}
+                dataSource={data.items}
+                pagination={{
+                    showSizeChanger: true,
+                    pageSize: params.limit,
+                    current: params.page,
+                    onChange: onTableChange,
+                    total: data.total,
+                }}
+            />
         </PageHeaderWrapper>
     )
 }
