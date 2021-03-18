@@ -1,5 +1,5 @@
 import type { MenuDataItem } from '@ant-design/pro-layout';
-import { DefaultFooter, getMenuData, getPageTitle } from '@ant-design/pro-layout';
+import { getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import type { ConnectProps } from 'umi';
 import { Link, useIntl, connect, FormattedMessage } from 'umi';
@@ -8,6 +8,7 @@ import type { ConnectState } from '@/models/connect';
 import DefaultSettings from '../../config/defaultSettings';
 import styles from './UserLayout.less';
 import SelectLang from '@/components/SelectLang'
+import Footer from '@/components/Footer';
 
 const { logo, title } = DefaultSettings
 
@@ -58,13 +59,13 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.desc}>
               <FormattedMessage
                 id="pages.layouts.userLayout.title"
-                defaultMessage="Ant Design 是西湖区最具影响力的 Web 设计规范"
+                defaultMessage="Đây là CMS Demo!!!"
               />
             </div>
           </div>
           {children}
         </div>
-        {/* <DefaultFooter /> */}
+        <Footer />
       </div>
     </HelmetProvider>
   );
