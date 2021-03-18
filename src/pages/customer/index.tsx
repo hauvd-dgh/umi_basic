@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+// import { useAccess, Access } from 'umi'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import { Table } from 'antd'
 import { getCustomerList, getProductList } from '../../services/APILibrary'
@@ -29,7 +30,14 @@ const columns = [
     },
 ];
 
-const Customers = () => {
+const Customers = (props) => {
+
+    // const foo = props
+    // const access = useAccess()
+
+    // if (access.canReadFoo) {
+
+    // }
 
     //Creating array to contain data
     const [data, setData] = React.useState({
@@ -67,6 +75,11 @@ const Customers = () => {
 
     return (
         <PageHeaderWrapper>
+            {/* <Access accessible={access.canReadFoo} fallback={
+                <h1>Only admin can read this content</h1>
+            }>
+                <h1>Hi admin!!!</h1>
+            </Access> */}
             <Table
                 columns={columns}
                 dataSource={data.items}
