@@ -38,6 +38,6 @@ screenshot
 .eslintcache
 
 # Config enviroment
-.env
+/.env
 
 build
