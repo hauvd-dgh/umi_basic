@@ -20,16 +20,23 @@ const codeMessage: { [status: number]: string } = {
   504: '网关超时。',
 };
 
-const _apiPrefix = 'https://ecommerce-api.vndigitech.com'
+const _apiPrefix = API_PREFIX
 
 interface FetchOptions extends RequestOptionsInit {
   url: string
   autoPrefix?: boolean
 }
 
-const generateUrl = (url: string, _autoPrefix = false) => {
-  if (!_autoPrefix) return url
-  return `${_apiPrefix}/${url}`
+interface FetchResponseType {
+  statusCode: number
+  result: object
+  error: ErrorType
+  message: ErrorType
+  response: object
+}
+
+interface ErrorType {
+  message: any
 }
 
 const errorHandler = (error: { response: Response; data: any }): Response => {
@@ -48,6 +55,33 @@ const request = extend({
   errorHandler,
   timeout: 15000,
 })
+
+interface FetchOptions extends RequestOptionsInit {
+  url: string
+  autoPrefix?: boolean
+}
+
+const generateUrl = (url: string, _autoPrefix = false) => {
+  if (!_autoPrefix) return url
+  return `${_apiPrefix}/${url}`
+}
+
+// const errorHandler = (error: { response: Response; data: any }): Response => {
+//   const { response } = error
+//   if (!response) {
+//     notification.error({
+//       description:
+//         'Mạng của bạn không bình thường và không thể kết nối với máy chủ',
+//       message: 'Mạng bất thường',
+//     })
+//   }
+//   return error.data
+// }
+
+// const request = extend({
+//   errorHandler,
+//   timeout: 15000,
+// })
 
 export const fetch = ({
   url,
@@ -84,6 +118,36 @@ export const fetch = ({
       notification.error(message)
       return false
     })
+}
+//__________________________________________________________________________
+
+export const fetchAuth = async ({
+  url,
+  headers,
+
+  autoPrefix = true,
+  ...options
+}: FetchOptions) => {
+    const accessToken = localStorage.getItem('access_token')
+    if (!accessToken) {
+      history.replace(`/login`)
+      return { success: false }
+    }
+
+    const response = await request(generateUrl(url, autoPrefix), {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        ...headers,
+      },
+      ...options,
+    })
+
+  if (response) {
+    return { success: true, ...response }
+  } else {
+    return { success: false }
+  }
 }
 
 

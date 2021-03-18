@@ -35,9 +35,15 @@
               },
               {
                 path: '/products',
-                name: 'Products',
+                name: 'products',
                 icon: 'smile',
                 component: './products',
+              },
+              {
+                path: '/customer',
+                name: 'customers',
+                icon: 'smile',
+                component: './customer',
               },
               {
                 path: '/admin',

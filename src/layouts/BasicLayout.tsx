@@ -19,6 +19,7 @@ import RightContent from '@/components/GlobalHeader/RightContent';
 import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import DefaultSettings from '../../config/defaultSettings';
+import Footer from '@/components/Footer';
 
 const { logo } = DefaultSettings
 
@@ -57,16 +58,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   });
 
 const defaultFooterDom = (
-  <div>
-    <hr />
-    <p style={{
-      textAlign: 'center',
-      margin: '20px 0px',
-      color: 'gray',
-    }}>
-      copyright @ {`${new Date().getFullYear()} digitech solutions`}
-    </p>
-  </div>
+  <Footer />
 );
 
 const BasicLayout: React.FC<BasicLayoutProps> = (props) => {

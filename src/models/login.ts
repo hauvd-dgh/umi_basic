@@ -6,6 +6,7 @@ import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
+import { response } from 'express';
 
 export type StateType = {
   status?: 'ok' | 'error';
@@ -35,30 +36,47 @@ const Model: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
+      
       yield put({
         type: 'changeLoginStatus',
         payload: response,
       });
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        message.success('🎉 🎉 🎉  登录成功！');
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
+
+      //checking login user
+      if (response.statusCode) {
+        switch (response.statusCode) {
+          case 401:
+            console.log("Noice: email or password incorrect!!!")
+          default:
+            //nothing
         }
-        history.replace(redirect || '/');
+      } else {
+        console.log("Noice: login success!!!")
+        // console.log("🚀 ~ file: login.ts ~ line 38 ~ *login ~ response", response)
+        localStorage.setItem("access_token", response.access_token);
+        window.location.href = '/'
       }
+
+      // Login successfully
+      // if (response.status === 'ok') {
+      //   const urlParams = new URL(window.location.href);
+      //   const params = getPageQuery();
+      //   message.success('🎉 🎉 🎉  登录成功！');
+      //   let { redirect } = params as { redirect: string };
+      //   if (redirect) {
+      //     const redirectUrlParams = new URL(redirect);
+      //     if (redirectUrlParams.origin === urlParams.origin) {
+      //       redirect = redirect.substr(urlParams.origin.length);
+      //       if (redirect.match(/^\/.*#/)) {
+      //         redirect = redirect.substr(redirect.indexOf('#') + 1);
+      //       }
+      //     } else {
+      //       window.location.href = '/';
+      //       return;
+      //     }
+      //   }
+      //   history.replace(redirect || '/');
+      // }
     },
 
     logout() {
@@ -71,6 +89,9 @@ const Model: LoginModelType = {
             redirect: window.location.href,
           }),
         });
+      }
+      if (localStorage.getItem('access_token')) {
+        localStorage.removeItem('access_token')
       }
     },
   },

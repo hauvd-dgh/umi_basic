@@ -7,5 +7,9 @@ export default {
     'app.welcome.link.fetch-blocks': 'Lấy tất cả các khối',
     'app.welcome.link.block-list': 'Xây dựng nhanh chóng, trang web dự trên "phát triển khối"',
     'home.welcome': 'Xin chào',
-    'Admin.testtiengviet': 'hế lô'
+    'Admin.testtiengviet': 'hế lô',
+    'menu.home': 'Trang chủ',
+    'menu.welcome': 'Xin chào',
+    'menu.products': 'Sản phẩm',
+    'menu.customers': 'Khách hàng',
   };

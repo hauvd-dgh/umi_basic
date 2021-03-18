@@ -37,4 +37,7 @@ screenshot
 .firebase
 .eslintcache
 
+# Config enviroment
+.env
+
 build
