@@ -46,6 +46,12 @@
                 component: './customer',
               },
               {
+                path: '/me',
+                name: 'me',
+                icon: 'smile',
+                component: './User/me',
+              },
+              {
                 path: '/admin',
                 name: 'admin',
                 icon: 'crown',
@@ -65,6 +71,7 @@
                 name: 'list.table-list',
                 icon: 'table',
                 path: '/list',
+                access: 'canReadFoo',
                 component: './TableList',
               },
               {
