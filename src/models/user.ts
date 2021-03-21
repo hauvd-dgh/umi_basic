@@ -1,6 +1,6 @@
 import type { Effect, Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent, query as queryUsers, queryCurrentUser } from '@/services/user';
 
 export type CurrentUser = {
   avatar?: string;
@@ -41,6 +41,7 @@ const UserModel: UserModelType = {
   },
 
   effects: {
+
     *fetch(_, { call, put }) {
       const response = yield call(queryUsers);
       yield put({
@@ -48,20 +49,32 @@ const UserModel: UserModelType = {
         payload: response,
       });
     },
+
+    // Hàm chờ lấy user infomation để set xuống redux store
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      // Gọi qua service user xử lý api lấy user infomation về
+      const response = yield call(queryCurrentUser);
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: response.user,
       });
     },
   },
 
   reducers: {
+
+    // Lưu user infomation xuống store của redux
     saveCurrentUser(state, action) {
+      // Vì thằng umi cần đúng 1 trường name của mình để hiển thị cái tên trên góc phải màn hình
+      // Nên phải structure lại response trả về từ api rồi mới lưu xuống store của redux
+      // Trường name sẽ được gọi trong HeaderDropdown component
+      const formatUser = {
+        ...action.payload,
+        name: action.payload.firstName
+      }
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: formatUser || {},
       };
     },
     changeNotifyCount(

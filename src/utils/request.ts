@@ -128,13 +128,17 @@ export const fetchAuth = async ({
   autoPrefix = true,
   ...options
 }: FetchOptions) => {
+
+    // Lấy accessToken từ local storage cho từng api url cần authentication
     const accessToken = localStorage.getItem('access_token')
     if (!accessToken) {
-      history.replace(`/login`)
+      window.location.href = '/login'
+      // history.replace(`/login`)
       return { success: false }
     }
 
-    const response = await request(generateUrl(url, autoPrefix), {
+    // Bỏ accessToken vào header khi gọi api để authentication
+    const response = await request(url, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${accessToken}`,

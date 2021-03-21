@@ -52,7 +52,6 @@ const Model: LoginModelType = {
         }
       } else {
         console.log("Noice: login success!!!")
-        // console.log("🚀 ~ file: login.ts ~ line 38 ~ *login ~ response", response)
         localStorage.setItem("access_token", response.access_token);
         window.location.href = '/'
       }
@@ -64,6 +63,7 @@ const Model: LoginModelType = {
       //   message.success('🎉 🎉 🎉  登录成功！');
       //   let { redirect } = params as { redirect: string };
       //   if (redirect) {
+       
       //     const redirectUrlParams = new URL(redirect);
       //     if (redirectUrlParams.origin === urlParams.origin) {
       //       redirect = redirect.substr(urlParams.origin.length);
@@ -92,6 +92,9 @@ const Model: LoginModelType = {
       }
       if (localStorage.getItem('access_token')) {
         localStorage.removeItem('access_token')
+        localStorage.removeItem('user_info')
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('userInfo')
       }
     },
   },
