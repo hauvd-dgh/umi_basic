@@ -1,7 +1,11 @@
 export default function(initialState: any) {
     // Lấy user infomation (role) từ app.ts
-    const { id: userId, role } = initialState;
-    
+    let role: string = 'ANONYMOUS';
+    const data = initialState;
+    if (data && typeof data.role === 'string') {
+        role = data.role
+    }
+
     return {
         canReadFoo: role === 'CUSTOMER',
         canUpdateFoo: role === 'ADMIN',

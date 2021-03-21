@@ -1,7 +1,7 @@
 ﻿export default [
   {
     path: '/',
-    component: '../layouts/BlankLayout',
+    // component: '../layouts/BlankLayout',
     routes: [
       {
         path: '/user',

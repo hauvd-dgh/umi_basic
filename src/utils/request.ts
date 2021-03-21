@@ -132,8 +132,8 @@ export const fetchAuth = async ({
     // Lấy accessToken từ local storage cho từng api url cần authentication
     const accessToken = localStorage.getItem('access_token')
     if (!accessToken) {
-      window.location.href = '/login'
-      // history.replace(`/login`)
+      window.location.href = '/user/login'
+      // history.replace(`/user/login`)
       return { success: false }
     }
 
