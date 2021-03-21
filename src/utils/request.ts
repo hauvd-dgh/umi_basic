@@ -1,6 +1,7 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend, RequestOptionsInit } from 'umi-request';
 import { notification } from 'antd';
+import { history } from '@/.umi/core/history';
 
 const codeMessage: { [status: number]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -20,16 +21,38 @@ const codeMessage: { [status: number]: string } = {
   504: '网关超时。',
 };
 
-const _apiPrefix = 'https://ecommerce-api.vndigitech.com'
+
+const access_token: string = localStorage.getItem('access_token')
+const expires_time: number =  localStorage.getItem('expires_time')
+const login_time: number = localStorage.getItem('login_time')
+
+function isAccessTokenError(): boolean {
+  if (!localStorage.getItem('access_token') || !localStorage.getItem('expires_time') || !localStorage.getItem('login_time')) {
+    return true
+  }
+  if (new Date().getTime() - login_time >= expires_time) {
+    return true
+  }
+  return false
+}
+
+const _apiPrefix = API_PREFIX
 
 interface FetchOptions extends RequestOptionsInit {
   url: string
   autoPrefix?: boolean
 }
 
-const generateUrl = (url: string, _autoPrefix = false) => {
-  if (!_autoPrefix) return url
-  return `${_apiPrefix}/${url}`
+interface FetchResponseType {
+  statusCode: number
+  result: object
+  error: ErrorType
+  message: ErrorType
+  response: object
+}
+
+interface ErrorType {
+  message: any
 }
 
 const errorHandler = (error: { response: Response; data: any }): Response => {
@@ -49,12 +72,45 @@ const request = extend({
   timeout: 15000,
 })
 
+interface FetchOptions extends RequestOptionsInit {
+  url: string
+  autoPrefix?: boolean
+}
+
+const generateUrl = (url: string, _autoPrefix = false) => {
+  if (!_autoPrefix) return url
+  return `${_apiPrefix}/${url}`
+}
+
+// const errorHandler = (error: { response: Response; data: any }): Response => {
+//   const { response } = error
+//   if (!response) {
+//     notification.error({
+//       description:
+//         'Mạng của bạn không bình thường và không thể kết nối với máy chủ',
+//       message: 'Mạng bất thường',
+//     })
+//   }
+//   return error.data
+// }
+
+// const request = extend({
+//   errorHandler,
+//   timeout: 15000,
+// })
+
 export const fetch = ({
   url,
   headers,
   autoPrefix = true,
   ...options
 }: FetchOptions) => {
+  if (isAccessTokenError()) {
+    localStorage.clear()
+    history.replace(`/user/login`)
+    return { success: false }
+  }
+
   return request(generateUrl(url, autoPrefix), {
     method: 'GET',
     headers: {
@@ -84,6 +140,35 @@ export const fetch = ({
       notification.error(message)
       return false
     })
+}
+//__________________________________________________________________________
+
+export const fetchAuth = async ({
+  url,
+  headers,
+  autoPrefix = true,
+  ...options
+}: FetchOptions) => {
+  if (isAccessTokenError()) {
+    localStorage.clear()
+    history.replace(`/user/login`)
+    return { success: false }
+  }
+  
+  const response = await request(generateUrl(url, autoPrefix), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      ...headers,
+    },
+    ...options,
+  })
+
+  if (response) {
+    return { success: true, ...response }
+  } else {
+    return { success: false }
+  }
 }
 
 

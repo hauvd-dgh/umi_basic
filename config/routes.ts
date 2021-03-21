@@ -1,7 +1,7 @@
 ﻿export default [
   {
     path: '/',
-    component: '../layouts/BlankLayout',
+    // component: '../layouts/BlankLayout',
     routes: [
       {
         path: '/user',
@@ -30,14 +30,27 @@
               {
                 path: '/welcome',
                 name: 'welcome',
-                // icon: 'smile',
+                icon: 'home',
                 component: './Welcome',
               },
               {
                 path: '/products',
-                name: 'Products',
+                name: 'products',
                 icon: 'smile',
                 component: './products',
+              },
+              {
+                path: '/customer',
+                name: 'customers',
+                icon: 'smile',
+                component: './customer',
+              },
+              {
+                path: '/me',
+                name: 'me',
+                icon: 'smile',
+                component: './User/me',
+                access: 'canReadFoo'
               },
               {
                 path: '/admin',
@@ -59,6 +72,7 @@
                 name: 'list.table-list',
                 icon: 'table',
                 path: '/list',
+                access: 'canReadFoo',
                 component: './TableList',
               },
               {

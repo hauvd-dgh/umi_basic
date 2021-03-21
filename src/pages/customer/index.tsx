@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
+// import { useAccess, Access } from 'umi'
 import { PageHeaderWrapper } from '@ant-design/pro-layout'
 import { Table } from 'antd'
-import { getProductList } from '../../services/APILibrary'
+import { getCustomerList, getProductList } from '../../services/APILibrary'
 
 const columns = [
     {
@@ -14,23 +15,22 @@ const columns = [
         key: 'name',
         align: 'left',
         render: text => <>
-            {/* <p>
-                {text.SKU}
-            </p> */}
-            <p>{text.name}</p>
+            <p>
+                {text.firstName + ' ' + text.lastName}
+            </p>
         </>
     },
     {
-        title: 'Price',
-        key: 'salePrice',
-        align: 'right',
+        title: 'Email',
+        key: 'email',
+        align: 'left',
         render: text => <>
-            {text.salePrice} VND
+            {text.email}
         </>
     },
 ];
 
-const Products = () => {
+const Customers = (props) => {
 
     //Creating array to contain data
     const [data, setData] = React.useState({
@@ -46,7 +46,7 @@ const Products = () => {
 
     //Fetching data
     async function getData() {
-        const res = await getProductList(params.limit, params.page)
+        const res = await getCustomerList(params.limit, params.page)
         setData({
             items: res.data,
             total: res.total,
@@ -79,10 +79,8 @@ const Products = () => {
                     total: data.total,
                 }}
             />
-            <p>{new Date().getTime()}</p>
-            <p>{localStorage.getItem('expires_time')}</p>
         </PageHeaderWrapper>
     )
 }
 
-export default Products
+export default Customers

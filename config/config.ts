@@ -41,4 +41,7 @@ export default defineConfig({
     basePath: '/',
   },
   esbuild: {},
+  define: {
+    API_PREFIX: process.env.API_PREFIX || false,
+  },
 });
