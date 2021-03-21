@@ -4,31 +4,46 @@ import { getCurrentUserInfo } from "@/services/APILibrary"
 import { useModel } from '@/.umi/plugin-model/useModel';
 
 const getMe = (props) => {
-    const [data, setData] = React.useState()
+    const [data, setData] = React.useState({
+        name: '',
+        email: '',
+        phone: '',
+        role: '',
+    })
 
-    const { initialState, loading, error, refresh, setInitialState } = useModel('@@initialState');
-    console.log("🚀 ~ file: index.tsx ~ line 9 ~ getMe ~ initialState", initialState.role)
+    // const { initialState, loading, error, refresh, setInitialState } = useModel('@@initialState');
+    // console.log("🚀 ~ file: index.tsx ~ line 9 ~ getMe ~ initialState", initialState.role)
 
     async function getData() {
         const res = await getCurrentUserInfo()
-        console.log("🚀 ~ file: index.tsx ~ line 9 ~ getData ~ res", res)
-        // setData(res)
+        setData({
+            name: res.firstName + ' ' + res.lastName,
+            email: res.email,
+            phone: res.phone,
+            role: res.role,
+        })
     }
 
-    // useMemo(() => {
-    //     getData()
-    // }, [])
+    useMemo(() => {
+        getData()
+    }, [])
 
-    // const {foo} = props;
-    // const access = useAccess();
+    const { foo } = props;
+    const access = useAccess();
+
+    if (access.canReadFoo) {
+        data.role
+    }
    
 
     return (
-        // <>
-        //     {/* {getData()} */}
-        //     <h1>Hi there...</h1>
-        //     {/* <p>data = {data}</p> */}
-        // </>
+        <div>
+            <h1>{data.name}</h1>
+            <h1>{data.email}</h1>
+            <h1>{data.phone}</h1>
+            <h1>{data.role}</h1>
+        </div>
+
         // <div>
         //     <Access
         //         accessible={access.canReadFoo}
@@ -49,7 +64,6 @@ const getMe = (props) => {
         //         Delete foo.
         //     </Access>
         // </div>
-        <div></div>
     )
 }
 

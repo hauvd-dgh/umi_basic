@@ -53,7 +53,7 @@ const Customers = (props) => {
 
     //Fetching data
     async function getData() {
-        const res = await getCustomerList(data, params.limit, params.page)
+        const res = await getCustomerList(params.limit, params.page)
         setData({
             items: res.data,
             total: res.total,

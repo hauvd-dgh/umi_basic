@@ -1,6 +1,7 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend, RequestOptionsInit } from 'umi-request';
 import { notification } from 'antd';
+import { history } from '@/.umi/core/history';
 
 const codeMessage: { [status: number]: string } = {
   200: '服务器成功返回请求的数据。',
@@ -19,6 +20,21 @@ const codeMessage: { [status: number]: string } = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
+
+const access_token: string = localStorage.getItem('access_token')
+const expires_time: number =  localStorage.getItem('expires_time')
+const login_time: number = localStorage.getItem('login_time')
+
+function isAccessTokenError(): boolean {
+  if (!(localStorage.getItem('access_token') && localStorage.getItem('expires_time') && localStorage.getItem('login_time'))) {
+    return true
+  }
+  if (new Date().getTime() - login_time >= expires_time) {
+    return true
+  }
+  return false
+}
 
 const _apiPrefix = API_PREFIX
 
@@ -89,6 +105,18 @@ export const fetch = ({
   autoPrefix = true,
   ...options
 }: FetchOptions) => {
+  if (isAccessTokenError()) {
+    localStorage.clear()
+    history.replace(`/user/login`)
+    return { success: false }
+  }
+
+  // if (!localStorage.getItem('access_token')) {
+  //   localStorage.clear()
+  //   history.replace(`/user/login`)
+  //   return { success: false }
+  // }
+
   return request(generateUrl(url, autoPrefix), {
     method: 'GET',
     headers: {
@@ -141,7 +169,7 @@ export const fetchAuth = async ({
     const response = await request(url, {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${access_token}`,
         ...headers,
       },
       ...options,

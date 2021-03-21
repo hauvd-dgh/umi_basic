@@ -46,7 +46,7 @@ const Products = () => {
 
     //Fetching data
     async function getData() {
-        const res = await getProductList(data, params.limit, params.page)
+        const res = await getProductList(params.limit, params.page)
         setData({
             items: res.data,
             total: res.total,
@@ -79,6 +79,8 @@ const Products = () => {
                     total: data.total,
                 }}
             />
+            <p>{new Date().getTime()}</p>
+            <p>{localStorage.getItem('expires_time')}</p>
         </PageHeaderWrapper>
     )
 }

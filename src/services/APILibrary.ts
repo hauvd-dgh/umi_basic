@@ -7,7 +7,8 @@ const api = {
 }
 
 // Product List
-export function getProductList(data, limit, page) {
+export function getProductList(limit, page) {
+    let data: any
     return fetch({
         url: api.productList + `?limit=${limit}&page=${page}`,
         method: 'GET',
@@ -16,7 +17,8 @@ export function getProductList(data, limit, page) {
 }
 
 // Customer List
-export function getCustomerList(data, limit, page) {
+export function getCustomerList(limit, page) {
+    let data: any
     return fetchAuth({
         url: api.customerList + `?limit=${limit}&page=${page}`,
         method: 'GET',
