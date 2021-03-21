@@ -90,12 +90,12 @@ const Model: LoginModelType = {
           }),
         });
       }
-      if (localStorage.getItem('access_token')) {
+      
         localStorage.removeItem('access_token')
         localStorage.removeItem('user_info')
         localStorage.removeItem('accessToken')
         localStorage.removeItem('userInfo')
-      }
+      
     },
   },
 

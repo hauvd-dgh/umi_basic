@@ -11,7 +11,7 @@ import type {
 import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
-import { Link, useIntl, connect, history } from 'umi';
+import { Link, useIntl, connect, history, useModel } from 'umi';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
@@ -20,6 +20,8 @@ import type { ConnectState } from '@/models/connect';
 import { getMatchMenu } from '@umijs/route-utils';
 import DefaultSettings from '../../config/defaultSettings';
 import Footer from '@/components/Footer';
+import type { CurrentUser } from '@/models/user';
+
 
 const { logo } = DefaultSettings
 
@@ -42,6 +44,7 @@ export type BasicLayoutProps = {
   };
   settings: Settings;
   dispatch: Dispatch;
+  currentUser?: CurrentUser;
 } & ProLayoutProps;
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: Record<string, MenuDataItem>;
@@ -66,10 +69,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     dispatch,
     children,
     settings,
+    currentUser,
     location = {
       pathname: '/',
     },
   } = props;
+
+  const { setInitialState } = useModel('@@initialState');
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
 
@@ -79,6 +85,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         type: 'user/fetchCurrent',
       });
     }
+    // Set lại user infomation khi đăng nhập vào để thực hiện access.ts
+    setInitialState(currentUser)
   }, []);
   /** Init variables */
 
@@ -154,7 +162,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({ global, settings, user }: ConnectState) => ({
+  currentUser: user.currentUser,
   collapsed: global.collapsed,
   settings,
 }))(BasicLayout);
