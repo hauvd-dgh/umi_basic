@@ -27,7 +27,7 @@ const expires_time: number =  localStorage.getItem('expires_time')
 const login_time: number = localStorage.getItem('login_time')
 
 function isAccessTokenError(): boolean {
-  if (!(localStorage.getItem('access_token') && localStorage.getItem('expires_time') && localStorage.getItem('login_time'))) {
+  if (!localStorage.getItem('access_token') || !localStorage.getItem('expires_time') || !localStorage.getItem('login_time')) {
     return true
   }
   if (new Date().getTime() - login_time >= expires_time) {
@@ -111,12 +111,6 @@ export const fetch = ({
     return { success: false }
   }
 
-  // if (!localStorage.getItem('access_token')) {
-  //   localStorage.clear()
-  //   history.replace(`/user/login`)
-  //   return { success: false }
-  // }
-
   return request(generateUrl(url, autoPrefix), {
     method: 'GET',
     headers: {
@@ -152,28 +146,23 @@ export const fetch = ({
 export const fetchAuth = async ({
   url,
   headers,
-
   autoPrefix = true,
   ...options
 }: FetchOptions) => {
-
-    // Lấy accessToken từ local storage cho từng api url cần authentication
-    const accessToken = localStorage.getItem('access_token')
-    if (!accessToken) {
-      window.location.href = '/user/login'
-      // history.replace(`/user/login`)
-      return { success: false }
-    }
-
-    // Bỏ accessToken vào header khi gọi api để authentication
-    const response = await request(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        ...headers,
-      },
-      ...options,
-    })
+  if (isAccessTokenError()) {
+    localStorage.clear()
+    history.replace(`/user/login`)
+    return { success: false }
+  }
+  
+  const response = await request(generateUrl(url, autoPrefix), {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      ...headers,
+    },
+    ...options,
+  })
 
   if (response) {
     return { success: true, ...response }

@@ -32,13 +32,6 @@ const columns = [
 
 const Customers = (props) => {
 
-    // const foo = props
-    // const access = useAccess()
-
-    // if (access.canReadFoo) {
-
-    // }
-
     //Creating array to contain data
     const [data, setData] = React.useState({
         items: [], //data
@@ -75,11 +68,6 @@ const Customers = (props) => {
 
     return (
         <PageHeaderWrapper>
-            {/* <Access accessible={access.canReadFoo} fallback={
-                <h1>Only admin can read this content</h1>
-            }>
-                <h1>Hi admin!!!</h1>
-            </Access> */}
             <Table
                 columns={columns}
                 dataSource={data.items}

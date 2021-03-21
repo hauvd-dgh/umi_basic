@@ -54,7 +54,7 @@ const Model: LoginModelType = {
         console.log("Noice: login success!!!")
         localStorage.setItem("access_token", response.access_token);
         localStorage.setItem("expires_time", response.expires_in); //response.expires_in
-        localStorage.setItem("login_time", 10000); //new Date().getTime()
+        localStorage.setItem("login_time", new Date().getTime());
         window.location.href = '/'
       }
 
@@ -92,12 +92,7 @@ const Model: LoginModelType = {
           }),
         });
       }
-      
-        localStorage.removeItem('access_token')
-        localStorage.removeItem('user_info')
-        localStorage.removeItem('accessToken')
-        localStorage.removeItem('userInfo')
-      
+        localStorage.clear()
     },
   },
 

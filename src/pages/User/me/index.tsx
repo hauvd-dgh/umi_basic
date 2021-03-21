@@ -28,12 +28,12 @@ const getMe = (props) => {
         getData()
     }, [])
 
-    const { foo } = props;
-    const access = useAccess();
+    // const { foo } = props;
+    // const access = useAccess();
 
-    if (access.canReadFoo) {
-        data.role
-    }
+    // if (access.canReadFoo) {
+    //     data.role
+    // }
    
 
     return (
