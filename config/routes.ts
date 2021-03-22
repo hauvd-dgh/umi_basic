@@ -50,6 +50,7 @@
                 name: 'me',
                 icon: 'smile',
                 component: './User/me',
+                access: 'canReadFoo'
               },
               {
                 path: '/admin',

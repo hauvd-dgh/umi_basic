@@ -8,9 +8,7 @@ export default function(initialState: any) {
 
     return {
         canReadFoo: role === 'CUSTOMER',
+        canReadFoo: role === 'ADMIN',
         canUpdateFoo: role === 'ADMIN',
-        // canDeleteFoo: temp => {
-        //     return foo.ownerId === userId;
-        // },
     };
   }

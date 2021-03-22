@@ -52,10 +52,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       // Vì thông tin ở dạng object nên phải serialize bằng json stringify để parse sang dạng chuỗi
       localStorage.setItem("user_info", JSON.stringify(currentUser));
     }
-    if ((!isLogin && loading) || !isReady) {      
+    if ((!isLogin && loading) || !isReady) {
       return <PageLoading />;
     }
     if (!isLogin && window.location.pathname !== '/user/login') {
+      localStorage.clear()
       return <Redirect to={`/user/login?${queryString}`} />;
     }
     return children;
