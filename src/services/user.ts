@@ -14,7 +14,7 @@ export async function queryCurrentUser(): Promise<any> {
   // Được kế thừa từ hàm fetchAuth đã có get accessToken bên request
   // Vì hàm fetchAuth bên request lấy accessToken từ local storage được lưu khi đăng nhập
   return fetchAuth({
-    url: 'user/cms-me',
+    url: 'user/me',
     method: 'GET',
   });
 }
